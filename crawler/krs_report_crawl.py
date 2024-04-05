@@ -3,7 +3,7 @@
 import scrapy
 
 class MySpider(scrapy.Spider):
-    name = 'test'
+    name = 'krs_report'
 
     start_num = 1
     end_num = 15   
