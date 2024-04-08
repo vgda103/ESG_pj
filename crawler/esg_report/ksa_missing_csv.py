@@ -2,25 +2,15 @@
 import os
 import pandas as pd
 
+import sys
+sys.path.append("../../.")
+from libs.common import comm
+
+# path = '../../../files/ksa_report/csv/'
 path = '../../files/ksa_report/csv/'
 file_name = 'ksa_crawl_20240407.csv'
 
-file_path = path + file_name
-
-if os.path.isfile(file_path):
-    origin_data = pd.read_csv(file_path, encoding='cp949')
-    df = origin_data.copy()
-    # print(df)
-else:
-    print('존재하지 않는 파일입니다.')
-
-# df.head()
-
-# 리스트 총 개수
-print('리스트 총 개수: ', df.shape, '\n')
-
-# 결측치 확인
-print('결측치 확인: ', df.isnull().sum(), '\n')
+comm.missing_data(path, file_name, 'cp949')
 
 # 결측치 확인 후 해당 컬럼 및 행 삭제
 df = df.drop(labels='files', axis=1) # axis: {0 : index / 1 : columns} 
