@@ -1,7 +1,9 @@
 # -*- config: utf-8 -*-
 # 공통 함수 모음
 
+import os
 import re
+import pandas as pd
 
 class comm:
     # 텍스트 정제 함수
@@ -32,4 +34,24 @@ class comm:
         pattern = r'^.*?특파원]'
         text = re.sub(pattern, '' , string=text)
 
-        return text
+        return text    
+    
+    def missing_data(path=str, file=str, encode=str):
+        file_path = path + file
+
+        if os.path.isfile(file_path):
+            origin_data = pd.read_csv(file_path, encoding=encode)
+            df = origin_data.copy()
+            # print(df)
+        else:
+            return print('존재하지 않는 파일입니다.')
+        
+        # df.head()
+
+        # 리스트 총 개수
+        print('리스트 총 개수: ', df.shape, '\n')
+
+        # 결측치 확인
+        print('결측치 확인: ', df.isnull().sum(), '\n')
+        
+        return df
