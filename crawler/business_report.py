@@ -449,32 +449,32 @@ class Business_report( Crawling, utility ):
             # print( '평균 급여액 : ', total_pay // totla_employee )  
 
             # 총직원수
-            dic_temp[ 'totla_employee' ] = totla_employee
+            dic_temp[ 'emp_cnt' ] = totla_employee
             # 풀타임근로자
-            dic_temp[ 'Full_time' ] = Full_time
+            dic_temp[ 'regular_cnt' ] = Full_time
             # 파트타임 근로자
-            dic_temp[ 'part_time' ] = part_time
+            dic_temp[ 'non_regular_cnt' ] = part_time
             # 총급여
-            dic_temp[ 'total_pay' ] = total_pay
+            dic_temp[ 'salary_total' ] = total_pay
             # 총 근로일수
-            dic_temp[ 'total_average_service_day' ] = total_average_service
+            dic_temp[ 'work_day' ] = total_average_service
             # 년평균 근로일수 
-            dic_temp[ 'total_average_service_year' ] = total_average_service // Full_time
+            dic_temp[ 'work_avg' ] = total_average_service // Full_time
             # 평균 임금
-            dic_temp[ 'average_pay' ] = total_pay // totla_employee
+            dic_temp[ 'salary_avg' ] = total_pay // totla_employee
             pass # try 직원 끝
 
         # 데이터가 없을때 처리
         except:
             print( '직원 없음 넘어감' )
 
-            dic_temp[ 'totla_employee' ] = 0
-            dic_temp[ 'Full_time' ] = 0
-            dic_temp[ 'part_time' ] = 0
-            dic_temp[ 'total_pay' ] = 0
-            dic_temp[ 'total_average_service_day' ] = 0
-            dic_temp[ 'total_average_service_year' ] = 0
-            dic_temp[ 'average_pay' ] = 0
+            dic_temp[ 'emp_cnt' ] = 0
+            dic_temp[ 'regular_cnt' ] = 0
+            dic_temp[ 'non_regular_cnt' ] = 0
+            dic_temp[ 'salary_total' ] = 0
+            dic_temp[ 'work_day' ] = 0
+            dic_temp[ 'work_avg' ] = 0
+            dic_temp[ 'salary_avg' ] = 0
             # 에러 목록에 회사명과 에러 난곳을 추가
             error_corp.append( f'[{ dic_temp[ "comp_name" ] }:직원]' )
             pass # except 끝
@@ -504,11 +504,11 @@ class Business_report( Crawling, utility ):
             # print( '사외이사비율 : ', outside_company // len( executives[ 'list' ] ) * 100 ) 
 
             # 전체 임원수
-            dic_temp[ 'total_executives' ] = len( executives[ 'list' ] )
+            dic_temp[ 'director_seq' ] = len( executives[ 'list' ] )
             # 사외이사 수
-            dic_temp[ 'outside' ] = outside_company
+            dic_temp[ 'out_director_cnt' ] = outside_company
             # 사내이사
-            dic_temp[ 'company' ] = company
+            dic_temp[ 'in_director_cnt' ] = company
             # 사외이사 비율
             dic_temp[ 'outside_ratio' ] = outside_company // len( executives[ 'list' ] ) * 100
             pass # try 임원 끝
@@ -517,9 +517,9 @@ class Business_report( Crawling, utility ):
         except:
             print( '임원 없음 넘어감' )
 
-            dic_temp[ 'total_executives' ] = 0
-            dic_temp[ 'outside' ] = 0
-            dic_temp[ 'company' ] = 0
+            dic_temp[ 'director_seq' ] = 0
+            dic_temp[ 'out_director_cnt' ] = 0
+            dic_temp[ 'in_director_cnt' ] = 0
             dic_temp[ 'outside_ratio' ] = 0
             
             # 에러 목록에 회사명과 에러 난곳을 추가
@@ -551,16 +551,16 @@ class Business_report( Crawling, utility ):
             # print( '임원총임금 : ', total_executives_mending )
 
 
-            dic_temp[ 'avg_executives_mending' ] = di_all_directorate_meed[ 'list' ][0][ 'jan_avrg_mendng_am' ]
-            dic_temp[ 'total_executives_mending' ] = di_all_directorate_meed[ 'list' ][0][ 'mendng_totamt' ]
+            dic_temp[ 'per_salary_avg' ] = di_all_directorate_meed[ 'list' ][0][ 'jan_avrg_mendng_am' ]
+            dic_temp[ 'salary_total' ] = di_all_directorate_meed[ 'list' ][0][ 'mendng_totamt' ]
             pass # try 임원 전체 보수 끝
 
         # 데이터가 없을때 처리
         except:
             print( '임원 전체보수 없음 넘어감' )
 
-            dic_temp[ 'avg_executives_mending' ] = 0
-            dic_temp[ 'total_executives_mending' ] = 0
+            dic_temp[ 'per_salary_avg' ] = 0
+            dic_temp[ 'salary_total' ] = 0
 
             # 에러 목록에 회사명과 에러 난곳을 추가
             error_corp.append( f'[{ dic_temp[ "comp_name" ] }:임원 전체보수]' )
@@ -581,7 +581,7 @@ class Business_report( Crawling, utility ):
 
         # 조립된 URL 로 접속
         self.url_get( URL=URL )
-        # 접혹후 데이터를 가져온다
+        # 접속 데이터를 가져온다
         bulk_stocks = self.get_to_jsons()
 
         # bulk_stocks[ 'message' ]의 데이터에 조회된 이란 값이 있는지 확인
@@ -589,7 +589,7 @@ class Business_report( Crawling, utility ):
             # 데이터가 없을때 처리
             print( '최대주주 현황 없음 넘어감' )
 
-            dic_temp[ 'total_stocks' ] = 0
+            dic_temp[ 'top_stock_percent' ] = 0
             
             error_corp.append( f'[{ dic_temp[ "comp_name" ] }:최대주주 현황]' )
             # dic_corp_data.append( dic_temp )
@@ -611,7 +611,7 @@ class Business_report( Crawling, utility ):
             pass
 
         # print( '최대주주지분율 : ', total_stocks )
-        dic_temp[ 'total_stocks' ] = total_stocks
+        dic_temp[ 'top_stock_percent' ] = total_stocks
 
         # 얻은 데이터를 반환
         return dic_temp, error_corp
@@ -624,6 +624,11 @@ class Business_report( Crawling, utility ):
         pass
 
     def connect( self, date = '2023' ) -> None:
+        """
+        접속하여 데이터를 가져온다, 가져올데이터
+        직원현황(6항목), 임원현황(6항목), 최대주주현황(1항목)
+        date : 데이터를 검색할 년도
+        """
         
         MAX_CONNECTIONS_PER_MINUTE = 60     # 총 반복 횟수
         SECONDS_PER_MINUTE = 90             # 한계 시간(분)
@@ -686,12 +691,12 @@ class Business_report( Crawling, utility ):
                 # 중간 출력문 : 실행수 / 전체수 : 회사명
                 print( f'{ index } / { max_corp } : { corp.corp_name }' )
 
-                data, err = self.get_business_data( corp, dete = date )
+                data, err = self.get_business_data( corp, dete = date, doc_num = doc_num )
 
                 li_corp_data.append( data )
                 error_corp += err
 
-                self.get_FinancialStatements( corp, dete = date  )
+                self.get_FinancialStatements( corp, dete = date, doc_num = doc_num  )
 
                 # print( li_corp_data )
                 # print( error_corp )
@@ -724,5 +729,101 @@ class Business_report( Crawling, utility ):
         self.num += 1
 
         pass # def connect 끝
+
+    def get_connect_Financial( self, date = '2023' ) -> None:
+        """
+        접속하여 데이터를 가져온다, 가져올데이터
+        직원현황(6항목), 임원현황(6항목), 최대주주현황(1항목)
+        date : 데이터를 검색할 년도
+        """
+        
+        MAX_CONNECTIONS_PER_MINUTE = 60     # 총 반복 횟수
+        SECONDS_PER_MINUTE = 90             # 한계 시간(분)
+        
+        max_corp = len( self.li_c_list )    # 전체 수
+
+        doc_num = '11011'                   # 문서 번호
+        # li_corp_data = []                   # 회사 데이터를 저장할 변수 
+        error_corp = []                     # 에러를 저장할 변수
+        # num = 0
+        index = 0                           # 인덱스
+
+        
+        # 이전 접속 시간 초기화
+        previous_minute = time.time()       # 현제시간 저장
+        connections_this_minute = 0         # 접속 수 카운터
+        
+        while True:
+
+            # # 테스트 브레이크
+            # break
+
+            # 현재 시간 저장
+            current_time = time.time()
+
+            # 현재 시간 - 이전 시간의 값이 SECONDS_PER_MINUTE 보다 크면 연결 수 초기화
+            if current_time - previous_minute >= SECONDS_PER_MINUTE:
+                # 이전시간 초기화
+                previous_minute = current_time
+                # 접속 수를 초기화
+                connections_this_minute = 0 
+                # 출력 화면을 클리어
+                clear_output(wait=True)
+                pass # if current_time - previous_minute 끝
+
+            # 현제 접속 수가 최대 접속 수보다 적은지 확인
+            if connections_this_minute < MAX_CONNECTIONS_PER_MINUTE:
+                # 여기에 접속 코드 추가
+                # print("접속을 합니다.")
+                # print( f'{ i } : { connections_this_minute }' )
+
+                # i 가 max_corp 보다 크면, 함수 종료
+                if index >= max_corp:
+                    print( '모든 회사를 다 돌았음' )
+                    break # if i 끝
+
+                # self.corp_list.find_by_corp_name 의 리턴값이 없다면 건너 뛴다
+                if not self.corp_list.find_by_corp_name( self.li_c_list[ index ], exactly=True ):
+                    error_corp.append( f'[{ self.li_c_list[ index ] }:데이터없음]' )
+                    # 회사에 인덱스로 사용할 값 증가            
+                    index += 1
+                    # 접속 수 증가
+                    connections_this_minute += 1
+                    continue
+                    pass # if not self.corp_list.find_by_corp_name 끝
+
+                # 회사명으로 회사의 데이터를 가저온다.
+                corp = self.corp_list.find_by_corp_name( self.li_c_list[ index ], exactly=True )[0]
+
+                # 중간 출력문 : 실행수 / 전체수 : 회사명
+                print( f'{ index } / { max_corp } : { corp.corp_name }' )
+
+                self.get_FinancialStatements( corp, dete = date, doc_num = doc_num  )
+
+                # print( li_corp_data )
+                # print( error_corp )
+
+                # if index > 2:
+                #     break
+
+                # break # 테스트 브레이크
+                
+                # 회사에 인덱스로 사용할 값 증가
+                index += 1
+                # 접속 수 증가
+                connections_this_minute += 1
+                
+                pass # if connections_this_minute 끝
+
+            else:
+                # 최대 접속 수를 초과한 경우 대기
+                # clear_output(wait=True)
+                print("최대 접속 수를 초과하여 대기합니다.")
+                time.sleep(1)  # 1초 대기 후 다시 시도
+                pass # else 끝
+            
+            pass # while 끝
+
+        pass # def get_connect_Financial 끝
 
     pass # class Business_report 끝
