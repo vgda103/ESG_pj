@@ -625,7 +625,7 @@ class Business_report( Crawling, utility ):
 
     def connect( self, date = '2023' ) -> None:
         """
-        접속하여 데이터를 가져온다, 가져올데이터
+        접속하여 사업보고서 데이터와 제무제표를 다운 또는 파일을 저장한다
         직원현황(6항목), 임원현황(6항목), 최대주주현황(1항목)
         date : 데이터를 검색할 년도
         """
@@ -730,9 +730,10 @@ class Business_report( Crawling, utility ):
 
         pass # def connect 끝
 
+
     def get_connect_Financial( self, date = '2023' ) -> None:
         """
-        접속하여 데이터를 가져온다, 가져올데이터
+        접속하여 제무제표 다운받는다
         직원현황(6항목), 임원현황(6항목), 최대주주현황(1항목)
         date : 데이터를 검색할 년도
         """
@@ -825,5 +826,111 @@ class Business_report( Crawling, utility ):
             pass # while 끝
 
         pass # def get_connect_Financial 끝
+
+
+    def get_connect_Business( self, date = '2023' ) -> None:
+        """
+        접속하여 데이터를 가져온다와서 파일로 저장
+        직원현황(6항목), 임원현황(6항목), 최대주주현황(1항목)
+        date : 데이터를 검색할 년도
+        """
+        
+        MAX_CONNECTIONS_PER_MINUTE = 60     # 총 반복 횟수
+        SECONDS_PER_MINUTE = 90             # 한계 시간(분)
+        
+        max_corp = len( self.li_c_list )    # 전체 수
+
+        doc_num = '11011'                   # 문서 번호
+        li_corp_data = []                   # 회사 데이터를 저장할 변수 
+        error_corp = []                     # 에러를 저장할 변수
+        # num = 0
+        index = 0                           # 인덱스
+
+        
+        # 이전 접속 시간 초기화
+        previous_minute = time.time()       # 현제시간 저장
+        connections_this_minute = 0         # 접속 수 카운터
+        
+        while True:
+
+            # # 테스트 브레이크
+            # break
+
+            # 현재 시간 저장
+            current_time = time.time()
+
+            # 현재 시간 - 이전 시간의 값이 SECONDS_PER_MINUTE 보다 크면 연결 수 초기화
+            if current_time - previous_minute >= SECONDS_PER_MINUTE:
+                # 이전시간 초기화
+                previous_minute = current_time
+                # 접속 수를 초기화
+                connections_this_minute = 0 
+                # 출력 화면을 클리어
+                clear_output(wait=True)
+                pass # if current_time - previous_minute 끝
+
+            # 현제 접속 수가 최대 접속 수보다 적은지 확인
+            if connections_this_minute < MAX_CONNECTIONS_PER_MINUTE:
+                # 여기에 접속 코드 추가
+                # print("접속을 합니다.")
+                # print( f'{ i } : { connections_this_minute }' )
+
+                # i 가 max_corp 보다 크면, 함수 종료
+                if index >= max_corp:
+                    print( '모든 회사를 다 돌았음' )
+                    break # if i 끝
+
+                # self.corp_list.find_by_corp_name 의 리턴값이 없다면 건너 뛴다
+                if not self.corp_list.find_by_corp_name( self.li_c_list[ index ], exactly=True ):
+                    error_corp.append( f'[{ self.li_c_list[ index ] }:데이터없음]' )
+                    # 회사에 인덱스로 사용할 값 증가            
+                    index += 1
+                    # 접속 수 증가
+                    connections_this_minute += 1
+                    continue
+                    pass # if not self.corp_list.find_by_corp_name 끝
+
+                # 회사명으로 회사의 데이터를 가저온다.
+                corp = self.corp_list.find_by_corp_name( self.li_c_list[ index ], exactly=True )[0]
+
+                # 중간 출력문 : 실행수 / 전체수 : 회사명
+                print( f'{ index } / { max_corp } : { corp.corp_name }' )
+
+                data, err = self.get_business_data( corp, dete = date, doc_num = doc_num )
+
+                li_corp_data.append( data )
+                error_corp += err
+
+                # print( li_corp_data )
+                # print( error_corp )
+
+                # if index > 2:
+                #     break
+
+                # break # 테스트 브레이크
+                
+                # 회사에 인덱스로 사용할 값 증가
+                index += 1
+                # 접속 수 증가
+                connections_this_minute += 1
+                
+                pass # if connections_this_minute 끝
+
+            else:
+                # 최대 접속 수를 초과한 경우 대기
+                # clear_output(wait=True)
+                print("최대 접속 수를 초과하여 대기합니다.")
+                time.sleep(1)  # 1초 대기 후 다시 시도
+                pass # else 끝
+            
+            pass # while 끝
+        
+        # 파일 저장
+        self.save_json( f'coper{ self.num }.json', li_corp_data )
+        self.save_json( f'error_coper.json', error_corp )
+
+        self.num += 1
+
+        pass # def get_connect_Business 끝
 
     pass # class Business_report 끝
