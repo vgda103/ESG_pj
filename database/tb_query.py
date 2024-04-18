@@ -1,3 +1,5 @@
+# 2024.4.18 변경 : 키순서, 컬럼 속성, 기수씨 Dart 요구사항 등
+
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from libs.db_excute import DBClass
@@ -50,7 +52,7 @@ sql_list = [
 	create_date DATETIME DEFAULT NOW(),
 	update_date DATETIME DEFAULT NOW(),
     FOREIGN KEY (company_seq) REFERENCES tb_company(company_seq),
-	FOREIGN KEY (key_code) REFERENCES tb_keyword(key_code),);""",
+	FOREIGN KEY (key_code) REFERENCES tb_keyword(key_code));""",
     # 기업 보고서
     """CREATE TABLE tb_report(
 	report_seq INT AUTO_INCREMENT PRIMARY KEY,
