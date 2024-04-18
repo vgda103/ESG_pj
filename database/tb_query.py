@@ -90,7 +90,7 @@ sql_list = [
 	nps_seq INT AUTO_INCREMENT PRIMARY KEY,
 	company_seq INT NOT NULL,
 	key_code INT NOT NULL,
-    care_code SMALLINT NOT NULL,  
+    cate_code INT NOT NULL,  
 	create_year CHAR(10) NOT NULL,
 	join_cnt SMALLINT DEFAULT 0,
 	new_cnt TINYINT DEFAULT 0,
@@ -99,7 +99,7 @@ sql_list = [
 	update_date DATETIME DEFAULT NOW(),	
     FOREIGN KEY (company_seq) REFERENCES tb_company(company_seq),
 	FOREIGN KEY (key_code) REFERENCES tb_keyword(key_code),
-    FOREIGN KEY (cate_code) REFERENCES tn_caregory(cate_code));""",
+    FOREIGN KEY (cate_code) REFERENCES tb_category(cate_code));""",
     # 온실 가스 사용량
     """CREATE TABLE tb_green_gas_status(
 	gas_seq INT AUTO_INCREMENT PRIMARY KEY,
