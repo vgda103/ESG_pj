@@ -616,7 +616,7 @@ gradle-app.setting
 *.webp
 
 # Portable Network Graphics
-*.png
+*.png1
 
 # Animated Portable Network Graphics
 *.apng
